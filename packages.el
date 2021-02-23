@@ -56,3 +56,6 @@
 (package! dimmer)
 (package! zoom)
 (package! pdf-tools)
+(package! org-roam)
+(package! all-the-icons-ivy-rich)
+(package! zygospore)

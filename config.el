@@ -29,11 +29,17 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
+(setq org-directory "~/.doom.d/org/")
+(use-package! org-roam
+  :hook  (after-init . org-roam-mode)
+  :custom (org-roam-directory "~/.doom.d/org-roam/")
+  )
+(add-hook! after-init all-the-icons-ivy-rich-mode)
+(after! zygospore
+  (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 (use-package! ivy-posframe
   :config
   (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
@@ -49,7 +55,23 @@
       +latex-viewers '(pdf-tools okular)
 )
 
+(use-package! centaur-tabs
+  :config
+  (setq centaur-tabs-set-modified-marker t)
+  (setq centaur-tabs-style "box")
+  (setq centaur-tabs-set-icons t)
+  (setq centaur-tabs-height 36)
+  (centaur-tabs-headline-match)
+  (centaur-tabs-group-by-projectile-project)
+  (centaur-tabs-mode)
+  )
 
+(use-package! solaire-mode
+  :config
+  (setq solaire-mode-auto-swap-bg nil)
+  )
+(use-package! zoom
+  :commands (zoom-mode) )
 ;; (defun indent-region-or-buffer ()
 ;;   "Indent a region if selected, otherwise the whole buffer."
 ;;   (interactive)

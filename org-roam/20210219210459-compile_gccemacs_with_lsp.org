@@ -1,0 +1,5 @@
+#+title: Compile gccemacs with LSP
+
+
+export CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10
+./configure --with-nativecomp --with-json CFLAGS="-O0 -ggdb3 -mtune=native -march=native -fomit-frame-pointer" CXXFLAGS="-ggdb3 -O0" LDFLAGS="-ggdb3" --with-modules
