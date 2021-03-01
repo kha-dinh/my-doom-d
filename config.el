@@ -30,63 +30,79 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/.doom.d/org/")
-(use-package! org-roam
-  :hook  (after-init . org-roam-mode)
-  :custom (org-roam-directory "~/.doom.d/org-roam/")
-  )
-(add-hook! after-init all-the-icons-ivy-rich-mode)
-(after! zygospore
-  (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows))
+(setq org-roam-directory "~/.doom.d/org-roam/")
+
+;; (use-package! zygospore
+;; :config
+;; (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
-(use-package! ivy-posframe
-  :config
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
-  (ivy-posframe-mode)
+(add-hook! LaTeX-mode
+  (setq TeX-auto-save t
+        TeX-parse-self t
+        TeX-save-query nil
+        TeX-source-correlate-start-server t
+        TeX-source-correlate-method 'synctex
+        reftex-plug-into-AUCTeX t
+        +latex-viewers '(pdf-tools okular)
+        )
   )
-
-(setq TeX-auto-save t
-      TeX-parse-self t
-      TeX-save-query nil
-      TeX-source-correlate-start-server t
-      TeX-source-correlate-method 'synctex
-      reftex-plug-into-AUCTeX t
-      +latex-viewers '(pdf-tools okular)
-)
-
-(use-package! centaur-tabs
-  :config
+(global-set-key (kbd "M-;") #'comment-dwim-2)
+(use-package! zygospore)
+;; (load! zygospore)
+(map! :leader
+      :desc "Toggle delete other windows" "1" 'zygospore-toggle-delete-other-windows
+      :desc "Vertical split" "2"  'evil-window-split
+      :desc "Vertical split" "3"  'evil-window-vsplit
+      :desc "Vertical split" "0"  'ace-delete-other-windows
+      )
+;; (global-set-key (kbd "M-;") #'comment-line)
+(after! centaur-tabs
   (setq centaur-tabs-set-modified-marker t)
-  (setq centaur-tabs-style "box")
+  (setq centaur-tabs-style "wave")
   (setq centaur-tabs-set-icons t)
   (setq centaur-tabs-height 36)
-  (centaur-tabs-headline-match)
-  (centaur-tabs-group-by-projectile-project)
-  (centaur-tabs-mode)
   )
+;; (use-package! lsp-ui
+;;   :defer
+;;   :config
+;;   (setq lsp-ui-sideline-show-hover t
+;;         ;; (lsp-ui-doc-enalbe )
+;;         ;; lsp-ui-doc-position 'at-point
+;;         lsp-ui-doc-delay 1.5
+;;         lsp-ui-doc-use-childframe nil
+;;         ;; (lsp-ui-doc-show-with-cursor nil)
+;;         ;; (lsp-ui-doc-show-with-nil nil)
+;;         )
+;;   ;; (lsp-ui-doc-enable t)
+;;   )
+(global-visual-line-mode)
+(use-package! lsp-mode
+  ;; :hook (lsp-mode . lsp-ui-mode)
+  :config
+  (setq gc-cons-threshold (* 100 1024 1024)
+        read-process-output-max (* 1024 1024)
+        treemacs-space-between-root-nodes nil
+        company-idle-delay 0.5
+        company-minimum-prefix-length 1
+        lsp-idle-delay 0.5 ;; clangd is fast
+        ;; be more ide-ish
+        lsp-headerline-breadcrumb-enable t
+        )
+  )
+()
+(use-package! nyan-mode
+  :config
+  (setq nyan-wavy-trail t
+        nyan-animation-frame-interval 0.1)
+  (nyan-mode)
+  (nyan-start-animation))
 
 (use-package! solaire-mode
   :config
   (setq solaire-mode-auto-swap-bg nil)
   )
-(use-package! zoom
-  :commands (zoom-mode) )
-;; (defun indent-region-or-buffer ()
-;;   "Indent a region if selected, otherwise the whole buffer."
-;;   (interactive)
-;;   (unless (member major-mode prelude-indent-sensitive-modes)
-;;     (save-excursion
-;;       (if (region-active-p)
-;;           (progn
-;;             (indent-region (region-beginning) (region-end))
-;;             (message "Indented selected region."))
-;;         (progn
-;;           (indent-buffer)
-;;           (message "Indented buffer.")))
-;;       (whitespace-cleanup))))
-
-;; (global-set-key (kbd "C-c i") 'indent-region-or-buffer)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
