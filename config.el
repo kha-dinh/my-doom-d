@@ -51,11 +51,26 @@
 (global-set-key (kbd "M-;") #'comment-dwim-2)
 (use-package! zygospore)
 ;; (load! zygospore)
+(defvar my-completion-delay 0.5)
+(use-package! company
+  :config
+  (setq
+   company-idle-delay my-completion-delay
+   company-minimum-prefix-length 1)
+  (map!
+   :map company-active-map
+   ("<tab>" 'company-complete-selection)
+   ("<return>" nil)
+   ("RET" nil)
+   )
+  )
+
 (map! :leader
       :desc "Toggle delete other windows" "1" 'zygospore-toggle-delete-other-windows
       :desc "Vertical split" "2"  'evil-window-split
       :desc "Vertical split" "3"  'evil-window-vsplit
       :desc "Vertical split" "0"  'ace-delete-other-windows
+      :desc "Kill buffer" "k" 'kill-this-buffer
       )
 ;; (global-set-key (kbd "M-;") #'comment-line)
 (after! centaur-tabs
@@ -78,16 +93,14 @@
 ;;   ;; (lsp-ui-doc-enable t)
 ;;   )
 (global-visual-line-mode)
+
 (use-package! lsp-mode
   ;; :hook (lsp-mode . lsp-ui-mode)
   :config
   (setq gc-cons-threshold (* 100 1024 1024)
         read-process-output-max (* 1024 1024)
         treemacs-space-between-root-nodes nil
-        company-idle-delay 0.5
-        company-minimum-prefix-length 1
-        lsp-idle-delay 0.5 ;; clangd is fast
-        ;; be more ide-ish
+        lsp-idle-delay my-completion-delay ;; clangd is fast
         lsp-headerline-breadcrumb-enable t
         )
   )

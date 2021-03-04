@@ -1,0 +1,27 @@
+#+title: Clock Synchronization (Distributed System)
+
+
+* Algorithms
+** Lamport's Logical Clocks
++ Scenario: each process P_{i} has it own clock C_{i}.
+  1. Every event executed increment the clock.
+  2. When P_{i} sends a message /M/ to P_{j}, it attachs its incremented C_{i} as timestamp /ts(M)/.
+  3. On receiving the messasge, P_{j} adjusts its local clock C_{j} with max(C_{j}, /ts(M)/).
+** Lamport Multicast
+** Vector Clocks Protocol
+ 1. Each process P_{i} maintain a vector of local clock (Vector Clock VC_{i}) of other processes (the number of event occurred so far in the process)_{}
+ 2. Before an event, it increment its own clock VC_{i}[i].
+ 3. Every message attaches the local Vector Clock
+ 4. On receiving a message, process P_{j} update its own vector clock with
+    #+BEGIN_SRC python
+    for k in all_process:
+        VC_local[k]= max(VC_new[k], VC_local[k])
+    #+END_SRC
+ 5. The processing of the message is delayed until
+    1. ts(M)[i] == VC_{j}[i] + 1            (M is the next expected message from P_{i})
+    2. ts(M)[k] <= VC_{j}[k] for all k != i (P_{j} has seen all previous message by P_{i})
+* Methods to adjust the clock
+** Slewing
++ Increase / decrease the *clock rate* to slowly adjust the clock.
+** Stepping
++ Jump the clock if it takes too lock to adjust / off by too far.

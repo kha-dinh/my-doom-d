@@ -1,0 +1,39 @@
+#+title: Distributed Recovery
+
+* Types of recovery
+** Backward Recovery
++ Restore the system to a previous good state using checkpoints.
++ Can be expensive
+** Forward Recovery
++ Gradually brings the system back to the correct state
+* Problem with distributed checkpoints
++ Every message sent after the checkpoint is lost
++ Messages arrives after checkpoints may be duplicated
+* Principle of distributed recovery
++ *Recovery line* : A collection of checkpoints from different processes to roll back to the correct global state.
++ *Consistent state* : all sender must be *before* the recovery line and receiver *after* the recovery line
++ A *stable* message can never be lost as it has been logged to a storage. Stable messages can be used for recovery
++ Distributed recovery is a combination of backward recovery (Checkpointing) and forward recovery (Logging)
++ All process have to be restored to the global consistent state
++ Use logs to replay undone *stable* messages
+* Types of messages in a recovery:
++ *In-transit* : /send/ recorded but not /receive/
++ *Lost* : /send/ recorded but /receive/ is undone due to rollback
++ *Delay* : /send/ is not recorded because of late arriving / down process
++ *Orphan* : /received/ recorded but /send/ lost due to rollback
++ *Duplicated* : messages repeated due to replay after rollback
+* Coordinated Checkpointing
++ Coordinated checkpointing use a coordinator to orchestrate checkpoint creation, it guarantee that all checkpoints are consistent on creation.
++ A coordinator process multicast a CP_REQUEST
+  - Block all process
++ Participants
+  1. Take local checkpoints
+  2. Queue subsequent message
+  3. Acknowledge coordinator
++ Coordinator multicasts CP_DONE to continue execution
+* Logging protocols
+** Pessimistic logging protocol
++ ALL messages that have a dependent must be logged
+** Optimistic logging
++ After a crash, orphan processes are rolled back until there is no dependency
++ Each process must track is dependencies, which is difficult to implement

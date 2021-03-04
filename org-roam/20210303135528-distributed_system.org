@@ -1,0 +1,42 @@
+#+title: Distributed System
+
+* Basics
++ Is a collection of computers that behave like a single system
++ Need to have *Autonomous* components that collaborate with each other
++ A *Middleware* layer is used to connect different machines, it offers local OSes and Applications the same interfaces.
+* Some characteristics of Distributed systems:
+** There is no global state
+    - Processes have no up-to-date knowledge of other processes state.
+    - Problem: Termination and deadlock detection
+** There is no global clock
+    - Problem: Mutual exclusion
+    - There have to be protocols to synchronize the clock between distributed processes [[file:20210303201334-clock_synchronization_distributed_system.org][Clock Synchronization (Distributed System)]].
+** Nondeterminism
+    - Problem: Race conditions
+** Prone to failure
+** Limited bandwidth
+** Latency
+* *Advantages* of building distributed systems:
+  + More economical
+  + Fully utilize parallel algorithms
+* Goals
++ Make resources accessible
++ Better scalability / performance
++ Transparent to distribution
+* Distribution Transparency:
+  - Access Transparency
+  - Location Transparency
+  - Migration & Relocation Transparency
+  - Replication Transparency
+  - Concurrency Transparency
+  - Failure Transparency
+* Scalabillity Problems:
++ Size scalability
++ Geographical scalability
++ Administrative scalability
+* Techniques for scaling
+1. Hiding communication latencies
+2. Distribution
+3. Replication
+   a. Caching
+* [[file:20210303212911-distributed_recovery.org][Distributed Recovery]]

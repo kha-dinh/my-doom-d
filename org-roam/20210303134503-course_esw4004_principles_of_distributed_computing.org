@@ -1,0 +1,20 @@
+#+title: Course: [ESW4004] Principles of Distributed Computing
+
+* General info:
+** Professor: Nam Beomseok
+*** email: bnam@skku.edu
+*** Piazza:
+* Grading
+** Final exam: 50%
+** Term Project: 50%
+*** 2 students
+*** 4/26: 2 pages proposal (intro, motivation/challenge, proposed approach)
+*** 5/31: 8 pages paper (+ design, implementation, evaluation, conclusion)
+*** Format: 2 columns, 10pt times roman, single spaced
+* Textbooks:
+** Distributed Systems: Concepts and Design
+** Distributed System: Principles and Paradigms
+* Notes:
+- [[file:20210303135528-distributed_system.org][Distributed System]]
+- [[file:20210303201334-clock_synchronization_distributed_system.org][Clock Synchronization (Distributed System)]]
+- [[file:20210303212911-distributed_recovery.org][Distributed Recovery]]

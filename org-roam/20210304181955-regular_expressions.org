@@ -1,0 +1,8 @@
+#+title: Regular Expressions
+
+ - A regular expression can be used to denote [[file:20210304182544-regular_language.org][Regular Language]]
+   + \varepsilon: a regular expression denote set {\varepsilon} or L(\varepsilon)
+   + x and y denotes L(x) and L(y)
+     - x|y : L(x) \cup L(y)
+     - xy : L(x)L(y)
+     - x* : L(x)*

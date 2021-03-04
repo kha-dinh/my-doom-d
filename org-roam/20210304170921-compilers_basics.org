@@ -1,0 +1,48 @@
+#+title: Compilers Basics
+
+* Jobs of a compiler
++ To recognize  legal programs
++ To generate correct code
++ To manage the storage of variables and code
+*  Traditional Compiler Anatomy
+** Front End
+- Most of the front end functions can be *automated* since they revolve around text parsing
+*** Responsibilities of the front end
+**** Recognize legal programs
+**** Report errors in useful ways
+**** Produce IR & preliminary storage map
+**** Setup the /shape/ of the code for backend
+*** Modules
+**** Scanner
++ Process streams of characters into /words/ into *tokens*
++ *Tokens* : a word plus the part of speech it belongs to
+  - /Example/:
+    - x = x + y; becomes
+    - <id,x> <EQ,=> <id,x> <OP,+> <id,y> <EoE,;>
+    - <token type(part of speech),*lexeme*(word)>
+  - Typical tokens: /number, identifier, operator, new, while, if/
++ White spaces are eliminated
++ [[file:20210304181955-regular_expressions.org][Regular Expressions]] are used to extract tokens
+  - By inputing regular expressions as specifications, a *Scanner Generator* could build the Scanner
+    + e.g. ANTLR
+**** [[file:20210304193614-parser_compiler.org][Parser]]
+- Using *rules* to recognizes syntax from *tokens* (*Context-free analysis*)
+- Performs *context-sensitive* (semantic) analysis
+  + Analysis that include relation between multiple sentences
+  + E.g. type checking
+- Build *Intermediate Representation (IR)*
+** Back End
++ Automation is less useful in backend. Most of the tasks are done through heuristics
++ Problems in the back end are /NP-hard/
+*** Responsibilities
++ Translate IR into target machine code
++ Choose instructions to implement IR operations
++ Decide which values -> registers
++ Find optimal order of execution
++ Ensure conformance with system interfaces
+** Middle End
++ Mostly used for code optimization:
+  - Analyze and transforms IR
+*** Goal:
+  - Reduce Execution time, space, power consumption
+  - Preserve original meaning

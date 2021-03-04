@@ -1,0 +1,12 @@
+#+title: Course: [ESW4004] Principles of Compilers and Programming Languages
+
+* General
+* Grading
+** Midterm: 30%
+** Final: 30%
+** Term project: 30%
+** Participation: 10%
+
+
+* Notes
+** [[file:20210304170921-compilers_basics.org][Compilers Basics]]

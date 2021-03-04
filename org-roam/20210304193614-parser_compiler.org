@@ -1,0 +1,43 @@
+#+title: Parser (Compiler)
+
+* Goals
+- Check if stream of *tokens* is correct
+- Done through a series of rewrite, where
+- A *Non-terminal*
+* Production Rule
+- Rules used to replace tokens with ...
+- *Derivation* process consists of multiple rewrites
+  + *Leftmost derivation*: Replace leftmost tokens first
+  + *Rightmost derivation*: Replace rightmost tokens first
+- /Example of a rule/
+  |  1 | Expr | Expr Op Expr |
+  |  2 |      | number       |
+  |  3 |      | id           |
+  |  4 | Op   | +            |
+  |  5 |      | -            |
+  |  6 |      | *            |
+  |  7 |      | /            |
+- /Leftmost derivation/
+  for x - 2 * y
+  |     Rule | Sentential Form             |
+  | _(input) | Expr                        |
+  |        1 | *Expr Op Expr*              |
+  |        3 | *<id,x>* Op Expr            |
+  |        5 | <id,x> *-* Expr             |
+  |        1 | <id,x> - *Expr Op Expr*     |
+  |        2 | <id,x> - *<num,2>* Op Expr  |
+  |        6 | <id,x> - <num,2> *** Expr   |
+  |        3 | <id,x> - <num,2> * *<id,y>* |
+* Parse Tree
+* Parsing Techniques
+** Top-down
++ LL : Left-to-right input scan, Leftmost derivation
+  - E.g. Read charaters from left -> right
++ Start at the root of the parse tree and grow -> leaves
++ Pick a production rule and try to match with the input
++ If encounter bad pick, backtrack
++ Predictive parsing can prevent backtracks
+** Bottom-up
++ LR : Left-to-right input scan, Rightmost derivation
++ Start at the leaves and grow -> root
++
