@@ -9,4 +9,4 @@
 
 
 * Notes
-** [[file:20210304170921-compilers_basics.org][Compilers Basics]]
+** [[file:20210304170921-compilers.org][Compilers]]

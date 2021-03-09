@@ -1,0 +1,48 @@
+#+title: Intermediate Representations
+
+* Basics
+- Is the output of the [[file:20210304170921-compilers.org][Compilers]] Front end. The Middle end then optimize IR, and Back end transform IR into machine/native code.
+- IR encodes the compiler's knowledge about the program.
+* Types of IR
+** Structural IR
++ Graphical oriented
++ Used in source-to-source translators
++ Large in size
+  + /examples/: Tree, DAGs, [[file:20210305144307-abstract_syntax_tree.org][Abstract Syntax Tree]]
+** Linear IR
++ Simple, compact data structure
++ Easy to arrange
++ /examples/: [[file:20210305150006-three_address_code.org][Three Address Code]] , stack machine code
+** Hybrid IR
++ Combination of graph and linear
++ Useful for optimizations
++ /example/: [[file:20210305151346-control_flow_graph_cfg.org][Control Flow Graph (CFG)]]
+* TODO DU chain
+- Def-Use chain connects definition of variable to all of the uses it may have
+- Use-Def chain connects a use of a variable to all of the definitions it may have
+* Static Single Assignment (SSA) form
++ Enforce that there is only a single assignment to a variable
++ Is useful in some steps of optimization
++ Is more compact than Def-Use chains
+  - No dangling pointers created on dead code elimination
+** Translate from Multiple Assignment (MA) to SSA
++ Rename variable to remove multiple assignments
++ Add a pseudo-instruction v=\phi(v1,v2,v...,vn) to join multiple definitions
++ /example/ 
+  #+BEGIN_SRC bash
+if (A<B) then
+  A := 6;
+else
+  A := 0;
+B := A;
+# AFTER SSA
+if (A<B) then
+  A1 := 6;
+else
+  A2 := 0;
+A3 = \phi(A1, A2)
+B := A3;
+#+END_SRC
+** Algorithm for renaming variables
+*** Stack algorithm
+***

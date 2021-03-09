@@ -1,98 +1,51 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;; config.el -*- lexical-binding: t; -*-
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
+(setq-default delete-by-moving-to-trash t                      ; Delete files to trash
+              window-combination-resize t                      ; take new window space from all other windows (not just current)
+              x-stretch-cursor t)                              ; Stretch cursor to the glyph width
 
+(setq undo-limit 80000000                         ; Raise undo-limit to 80Mb
+      evil-want-fine-undo t                       ; By default while in insert all changes are one big blob. Be more granular
+      auto-save-default t                         ; Nobody likes to loose work, I certainly don't
+      truncate-string-ellipsis "…")               ; Unicode ellispis are nicer than "...", and also save /precious/ space
 
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(display-time-mode 1)                             ; Enable time in the mode-line
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
-;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+(if (equal "Battery status not available"
+           (battery))
+    (display-battery-mode 1)                        ; On laptops it's nice to know how much power you have
+  (setq password-cache-expiry nil))               ; I can trust my desktops ... can't I? (no battery = desktop)
+
+(global-subword-mode 1)                           ; Iterate through CamelCase words
+
+(setq user-full-name "Dinh Duy Kha"
+      user-mail-address "dalo2903@gmail.com")
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-vibrant)
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/.doom.d/org/")
-(setq org-roam-directory "~/.doom.d/org-roam/")
-
-;; (use-package! zygospore
-;; :config
-;; (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows))
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type 'relative)
-(add-hook! LaTeX-mode
-  (setq TeX-auto-save t
-        TeX-parse-self t
-        TeX-save-query nil
-        TeX-source-correlate-start-server t
-        TeX-source-correlate-method 'synctex
-        reftex-plug-into-AUCTeX t
-        +latex-viewers '(pdf-tools okular)
-        )
-  )
-(global-set-key (kbd "M-;") #'comment-dwim-2)
-(use-package! zygospore)
-;; (load! zygospore)
-(defvar my-completion-delay 0.5)
-(use-package! company
+(use-package! solaire-mode
   :config
-  (setq
-   company-idle-delay my-completion-delay
-   company-minimum-prefix-length 1)
-  (map!
-   :map company-active-map
-   ("<tab>" 'company-complete-selection)
-   ("<return>" nil)
-   ("RET" nil)
-   )
+  (setq solaire-mode-auto-swap-bg nil)
   )
-
-(map! :leader
-      :desc "Toggle delete other windows" "1" 'zygospore-toggle-delete-other-windows
-      :desc "Vertical split" "2"  'evil-window-split
-      :desc "Vertical split" "3"  'evil-window-vsplit
-      :desc "Vertical split" "0"  'ace-delete-other-windows
-      :desc "Kill buffer" "k" 'kill-this-buffer
-      )
-;; (global-set-key (kbd "M-;") #'comment-line)
+(use-package! nyan-mode
+  :config
+  (setq nyan-wavy-trail t
+        nyan-animation-frame-interval 0.1)
+  (nyan-mode)
+  (nyan-start-animation))
+(global-visual-line-mode)
+(setq display-line-numbers-type 'relative)
 (after! centaur-tabs
   (setq centaur-tabs-set-modified-marker t)
   (setq centaur-tabs-style "wave")
   (setq centaur-tabs-set-icons t)
   (setq centaur-tabs-height 36)
+
   )
-;; (use-package! lsp-ui
-;;   :defer
-;;   :config
-;;   (setq lsp-ui-sideline-show-hover t
-;;         ;; (lsp-ui-doc-enalbe )
-;;         ;; lsp-ui-doc-position 'at-point
-;;         lsp-ui-doc-delay 1.5
-;;         lsp-ui-doc-use-childframe nil
-;;         ;; (lsp-ui-doc-show-with-cursor nil)
-;;         ;; (lsp-ui-doc-show-with-nil nil)
-;;         )
-;;   ;; (lsp-ui-doc-enable t)
-;;   )
-(global-visual-line-mode)
+
+(defvar my-completion-delay 0.5)
 
 (use-package! lsp-mode
   ;; :hook (lsp-mode . lsp-ui-mode)
@@ -104,32 +57,70 @@
         lsp-headerline-breadcrumb-enable t
         )
   )
-()
-(use-package! nyan-mode
-  :config
-  (setq nyan-wavy-trail t
-        nyan-animation-frame-interval 0.1)
-  (nyan-mode)
-  (nyan-start-animation))
 
-(use-package! solaire-mode
+(after! company
   :config
-  (setq solaire-mode-auto-swap-bg nil)
+  (setq
+   company-idle-delay my-completion-delay
+   company-minimum-prefix-length 1)
+  (map!
+   :map company-active-map
+   ("<tab>" 'company-complete-selection)
+   ("<return>" nil)
+   ("RET" nil)
+   )
+  (add-hook 'evil-normal-state-entry-hook #'company-abort)
   )
 
-;; Here are some additional functions/macros that could help you configure Doom:
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
+
+
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/.doom.d/org/")
+(setq org-roam-directory "~/.doom.d/org/roam/")
+(setq deft-directory "~/.doom.d/org/")
+;; (setq org-ref-completion-library 'org-ref-ivy-cite)
+(setq reftex-default-bibliography "~/.doom.d/org/bibliography/bibliography.bib")
+(setq bibtex-completion-bibliography '("~/.doom.d/org/bibliography/bibliography.bib")
+      bibtex-completion-library-path "~/.doom.d/org/bibliography/pdfs"
+      bibtex-completion-notes-path "~/.doom.d/org/bibliography/ivy-bibtex-notes"
+      )
+(use-package! org-ref
+  :config
+  (setq org-ref-default-bibliography '("~/.doom.d/org/bibliography/bibliography.bib")
+        org-ref-bibliography-notes "~/.doom.d/org/bibliography/notes.org"
+        org-ref-pdf-directory "~/.doom.d/org/bibliography/pdfs/"
+        org-ref-completion-library 'org-ref-ivy-cite
+        ))
+
+(setq deft-recursive t)
+(add-hook! org-mode +org-pretty-mode)
+(use-package! org-roam-server
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8080
+        org-roam-server-authenticate nil))
+
+
+
+(add-hook! LaTeX-mode
+  (setq TeX-auto-save t
+        TeX-parse-self t
+        TeX-save-query nil
+        TeX-source-correlate-start-server t
+        TeX-source-correlate-method 'synctex
+        reftex-plug-into-AUCTeX t
+        +latex-viewers '(pdf-tools zathura)
+        lsp-latex-texlab-executable "~/.cargo/bin/texlab"
+        )
+  )
+;; (add-hook! LaTeX-mode lsp)
+
+(global-set-key (kbd "M-;") 'comment-dwim-2)
+(map! :leader
+      :desc "Toggle delete other windows" "1" 'zygospore-toggle-delete-other-windows
+      :desc "Vertical split" "2"  'evil-window-split
+      :desc "Vertical split" "3"  'evil-window-vsplit
+      :desc "Vertical split" "0"  'ace-delete-other-windows
+      :desc "Kill buffer" "k" 'kill-this-buffer
+      )

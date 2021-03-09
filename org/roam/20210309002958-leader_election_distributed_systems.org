@@ -1,0 +1,28 @@
+#+title: Leader Election (Distributed Systems)
+
+* Overview
++ Leader election is performed to find the next [[file:../../../.local/share/Trash/files/20210308230800-coordinator_distributed_system.org][Coordinator (Distributed System)]] in a distributed system.
+* Leader election algorithms
+** Bully Algorithm
+1. P sends ELECTION message to all processes with higher numbers
+2. If no one responds, P wins the /election/ and become the coordinator
+3. If higher process respond, it takes over (Continue to send ELECTION).
+   a. P's job is done
+** Election Algorithm using a ring
+1. A process attach its process ID to ELECTION message and sends it to the successor
+2. On receiving ELECTION, a process appends its process ID to the message and forward it
+   a. If fail, send to the next successor
+3. When the message get to the original sender, it decides the coordinator (The highest id) and send COORDINATOR message
+** Modifications for wireless network: Gossiping Protocol
++ A node send ELECTION message to neighbours
++ When a node receive ELECTION for the first time, it designate the sender as its parent, and send ELECTION message to its neighbors (except the parent)
++ When a node is ignored, it is a leaf
++ Nodes wait for acknowledgment, then send acknowledgment to is parent.
+  - ack message contains the highest node.
+** Election in Large-scale systems
++ *Superpeers* (coordinator) are selected that have the characteristics
+  - Normal nodes should have low-latency access to superpeers
+  - Evenly distributed across the overlay network
+  - There should be a fixed % of superpeers in the network
+  - Each superpeers should only serve a fixed number of normal nodes
+*** Repulsion force algorithm

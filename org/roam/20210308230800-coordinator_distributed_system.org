@@ -1,0 +1,72 @@
+#+title:  Coordinator (Distributed System)
+
+* Overview
++ Sometimes use by a [[file:20210303135528-distributed_system.org][Distributed System]] to guarantee consistency among resources
++ 1 or many processes acts as coordinator
++ All operation go through a sequencer that assign a number to each message
++ A [[file:20210309002958-leader_election_distributed_systems.org][Leader Election (Distributed Systems)]] algorithm is used to choose the next coordinator among the processes
+* Centralize Permission
++ Every process must request the coordinator for a resource
++ Coordinator then respond OK and lock the resource
++ Process inform the coordinator when done with the resource
++ Resource is unlocked
+** Advantages
++ Guarantee mutual exclusion
++ Fair sharing can be achieved by load balancing
++ Easy to implement
+** Disadvantages
++ Single point of failure
++ Perfomance bottleneck
+* Decentralized Permission
++ n coordinators is used. A process mush ask all coordinator.
++ Over half of the coordinator must agree (m > n/2)
+** Advantage
++ No single point of failure
+** Disadvantage
++ Lots of messages
++ Complex
+* Distributed Permissions (Ricart and Agrawala's algorithm)
++ Uses /Lamport's logical clocks/ to order events ([[file:20210303201334-clock_synchronization_distributed_system.org][Clock Synchronization (Distributed System)]])
++ Requestor broacast *reliable messages* to all other processes (include self)
+  - Then wait for OK replies from *all* other processes
++ On receiving  *reliable messages*
+  - If not interested in resource: reply OK
+  - if using resource, queue request, don't reply
+  - If interested,
+    + reply OK if requestor is earlier
+    + Quere request if is later
+** Advatage
++ No central bottleneck
++ Fewer messages than decentralized version
+** Disadvantage
++ 1 node failure will lock the whole system (n points of failure)
+  - Can be prevented using the *Token system*
+* Token Ring
++ Processes are organized in a logical ring
++ Each process knows its successors
++ Token is passed around the ring
++ Process with the *token* is granted access to the resource
+  - Processes interested in the resource waits for the token
+  - Release token when done ( Pass to the successor )
+    - If a node is dead (unresponsive), it pass the token to the node's sucessor
+** Advantages
++ Fairness, no starvation
++ If token is not lost, can recover from crashes
+** Disadvantage
++ Process holding the token crashes
++ Difficult to detect crash (a node holding a resource for a long time)
+  - Solved by using a *recovery token*
++ Difficult to regenerate exactly one token
+** Recovery token
++ When waiting for the token, all processes circulate a *recovery token*
++ If a process does not respond the recovery token, it is dead
+* Comparison between algorithms
++ Centralize is the most efficient
+|---------------+----------------------------------------------------------------------+-----------------------+----------------------------|
+| Algorithm     | Messages per entry/exit                                              | Messages before entry | Problems                   |
+|---------------+----------------------------------------------------------------------+-----------------------+----------------------------|
+| Centralize    | 3                                                                    | 2                     | Single point of failure    |
+| Decentralized | 3mk, k = 1,2,... (Number of retry)                                   | 2m                    | Starvation, low efficiency |
+| Distributed   | 2(n-1+)                                                              | 2(n-1)                | Crash of any process       |
+| Token ring    | 1 to \infty (Token can be circulate forever if no process request)        | 0 to n-1              | Lost token, process crash  |
+|---------------+----------------------------------------------------------------------+-----------------------+----------------------------|

@@ -1,0 +1,10 @@
+#+title: Abstract Syntax Tree
+
++ Is a type of structural [[file:20210305142947-intermediate_representations.org][Intermediate Representations]].
++ Is a parse tree ([[file:20210304193614-parser_compiler.org][Parser (Compiler)]]) with all non-terminal nodes removed.
++ Can be represented as *Linearized form* ,which is easier to manipulate compared to tree form:
+  * /example/: x - 2 * y can be represented as
+    + Postfix form ( x 2 y * - )
+    + Prefix form ( - x * 2 y )
++ a *Directed acyclic graph* (DAG) is an AST with a unique node for each value
+  - Can encode sharing of expressions

@@ -1,0 +1,108 @@
+#+title: Control Flow Graph (CFG)
+#+tags:compiler
+
+* Overview
++ A Hybrid [[file:20210305142947-intermediate_representations.org][Intermediate Representations]]
++ Represents the program structure
++ Generated from [[file:20210305144307-abstract_syntax_tree.org][Abstract Syntax Tree]] or a sequential list of statements
++ Composed of a set of *Basic blocks*
+* Basic blocks
+- The longest possible sequence of straight-line statements
+  + No branch in/out inside the block
+  + Single entry point
+  + Single exit
+* Construction of CFG from basic blocks
++ Given N basic blocks, a CFG is built by creating a set of /directed edges/ E that connect the blocks
++ A directed edge (N_{i}, N_{j}) is created if
+  - There is a conditional / unconditional jump from N_{i} to N_{j} OR
+  - N_{j} is an immediate sucessor of N_{i} AND the last statement of N_{i} is not unconditional jump
++ If the program exits/start at multiple nodes, intermediate nodes are created
+  - connected to original entry/exit node
+* Optimizations with CFG
+** Unreachable Code Elimination
++ Use a graph search algorithm (DFS or BFS) to traverse the CFG
++ Mark visited nodes
++ Other unmarked nodes are removed.
+** Edge Classification
++ Useful in some analyses
++ Construct a Deph-First-Spanning-Tree on CFG
++  Classifies 4 types for edges:
+  - Tree edge: Edges belongs to the spanning tree
+  - Forward edges: edges not belong to DFST to a descendant
+  - Back edges: edge not belong to DFST to an ancestor
+  - Cross edges: edges not belong to DFST to neither ancestor or descendant
+** Dominance Relation
++ A relation that indicates which block always precedes which blocks after the entry
++ Useful in /common subexpression elimination/ (CSE), code movement
++ Given $ G = (N, E,s) $ and two nodes $ d, n \in N $
+  - s: entry node
+  - N, E: Nodes, edges
+  - d *dominates* n (d *dom* n) if every path from s to n goes through d
+  - d *strictly (properly) dominates* n if d *dom* n and d != n
+  - d *immediately dominates* n (d *idom* n) if d is the last dominator of n
+    + d then *properly dominates* n and any other node k which *properly dominates* n and d
+    s -- k -- d -- n
+              ^
+*** Lemmas
+1. s *dominates* all node of G reachable from s
+2. n *dom* n
+3. Dominance relation have partial ordering
+   a. Reflexive: n dom n
+   b. Transitive: n dom m ^ m dom k => n dom k
+      s -- n -- m -- k
+   c. Anti-symmetric: n dom m ^ m dom n => n = m
+4. Dominators of a node forms a chain
+*** Algorithm
+#+BEGIN_SRC python
+def find_all_doms(G):
+    dom(entry) = {entry}
+    # Put all nodes in the dom set
+    for all n in N-{entry}:
+        dom(n) = N
+    while any dom(n) changes:
+        for all n in N-{entry}:
+            for all predecessors p of n:
+                # AND with the predecessors
+                dom(n) = dom(n) ^ dom(p)
+            # Add itself to the set
+            dom(n) = dom(n) v {n}
+#+END_SRC
+*** Dominator tree
++ Created from the CFG using the algorithm
++ T = (N,E_{D},s)
+  - E_{D} is a set of edges (n,m) such that n *idom* m
++ Properties
+  - A node dominates it self and its descendants
+  - A note immediately dominates its child nodes
+*** Common Subexpression Elimination with Dominance Relation
++ When d is a common dominator of blocks n_{1} and n_{2}
+  - e.g. dom(n_{1}) \cap dom(n_{2}) = d
++ We can mode the common computations fron n_{1} and n_{2} to block d
++ /example/:
+  n_{1}: x = a + b;
+  n_{2}: y = a + b;
+ Becomes
+  d: t = a + b;
+  n_{1}: x = t;
+  n_{2}: y = t;
+*** Code Movement with Dominance Relation
++ Some compiler optimizations such as prefetching try to move operations to the earliest point possible to account for the delay
+  - The operation can be moved to its *immediate dominator* if _data dependency is not violated_
+    + It can be repeatedly moved again to the next immediate dominators
+** Posdominance Relation
++ A relation that indicate which blocks always comes after which block to the exit
++ u *postdominates* v if every path from v to the exit goes through u
++ u *immediate postdominates* v if v the first dominator of v
+** Loop
++ Loops are made from back edges
+  - Loop entry: Node with a predecessor not in the loop
+  - Loop exit: a node with a successor not in the loop
+*** Natural Loops
++ for a back edge (m \rightarrow n), n *dom* m
+  + e.g. loop with 1 entry point
++ Most loops from high level construct are natural loops
+*** Strongly Conencted Components (SCC)
++ Is a subgraph G_{SCC} = (N_{SCC}, E_{SCC})
++ For any node u,v from N_{ssc}, a path from u to v and v to u always exist
+
+

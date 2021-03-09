@@ -11,6 +11,7 @@
 ** There is no global clock
     - Problem: Mutual exclusion
     - There have to be protocols to synchronize the clock between distributed processes [[file:20210303201334-clock_synchronization_distributed_system.org][Clock Synchronization (Distributed System)]].
+    - Alternatively, the system can have a [[file:20210308230800-coordinator_distributed_system.org][Coordinator (Distributed System)]]
 ** Nondeterminism
     - Problem: Race conditions
 ** Prone to failure

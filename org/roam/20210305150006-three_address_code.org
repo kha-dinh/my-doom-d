@@ -1,0 +1,24 @@
+#+title: Three Address Code
+
+* Basics
+- Is a type of linear [[file:20210305142947-intermediate_representations.org][Intermediate Representations]].
+- In general, it has statements in the form
+  $ x \leftarrow y op z $
+  + With 1 operator (op) and at most 3 names (x,y,z)
+- More complex operations are broken down into simpler Three Address Codes:
+  $ z \leftarrow x - 2 * y $ becomes
+  $ t \leftarrow 2 * y $
+  $ z \leftarrow x - t $
+* Characteristics
+  + Resemble assembly languages
+  + Introduce new set of names
+  + Compact form
+* Naive representation
++ Use a table of k * 4 small integers
++ Each records a operation / name / value
+| load  | r1 | y  |    |
+| loadi | r2 | 2  |    |
+| mult  | r3 | r2 | r1 |
+| load  | r4 | x  |    |
+| sub   | r5 | r4 | r3 |
++ Similar to asm code

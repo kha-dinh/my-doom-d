@@ -1,0 +1,5 @@
+* xu15_contr_chann_attac
+:PROPERTIES:
+:NOTER_DOCUMENT: xu15_contr_chann_attac.pdf
+:NOTER_PAGE: 1
+:END:

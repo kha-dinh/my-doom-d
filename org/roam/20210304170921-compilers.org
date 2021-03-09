@@ -1,4 +1,4 @@
-#+title: Compilers Basics
+#+title: Compilers
 
 * Jobs of a compiler
 + To recognize  legal programs
@@ -30,7 +30,7 @@
 - Performs *context-sensitive* (semantic) analysis
   + Analysis that include relation between multiple sentences
   + E.g. type checking
-- Build *Intermediate Representation (IR)*
+- Build [[file:20210305142947-intermediate_representations.org][Intermediate Representations]]
 ** Back End
 + Automation is less useful in backend. Most of the tasks are done through heuristics
 + Problems in the back end are /NP-hard/
@@ -42,7 +42,7 @@
 + Ensure conformance with system interfaces
 ** Middle End
 + Mostly used for code optimization:
-  - Analyze and transforms IR
+  - Analyze and transforms IR into more optimized forms
 *** Goal:
   - Reduce Execution time, space, power consumption
   - Preserve original meaning
