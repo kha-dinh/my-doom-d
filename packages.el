@@ -8,7 +8,7 @@
 (package! org-roam-bibtex)
 (package! org-ref)
 
-;; (package! lsp-latex)
+(package! lsp-latex)
 (unpin! pdf-tools)
 ;; (package! pdf-tools :pin nil)
 

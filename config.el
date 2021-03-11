@@ -103,17 +103,28 @@
 
 
 
-(add-hook! LaTeX-mode
-  (setq TeX-auto-save t
-        TeX-parse-self t
-        TeX-save-query nil
-        TeX-source-correlate-start-server t
-        TeX-source-correlate-method 'synctex
-        reftex-plug-into-AUCTeX t
-        +latex-viewers '(pdf-tools zathura)
-        lsp-latex-texlab-executable "~/.cargo/bin/texlab"
-        )
-  )
+(use-package! lsp-latex
+  :config
+  (server-start)
+  (setq
+   lsp-latex-forward-search-executable "emacsclient"
+   lsp-latex-texlab-executable "~/.cargo/bin/texlab"
+   lsp-latex-forward-search-args
+   '("--eval"
+     "(lsp-latex-forward-search-with-pdf-tools \"%f\" \"%p\" \"%l\")")
+   ))
+(setq +latex-viewers '(zathura pdf-tools okular))
+;; (add-hook! LaTeX-mode
+;;   (setq TeX-auto-save t
+;;         TeX-parse-self t
+;;         TeX-save-query nil
+;;         TeX-source-correlate-start-server t
+;;         TeX-PDF-mode t
+;;         TeX-source-correlate-method 'synctex
+;;         reftex-plug-into-AUCTeX t
+;;         +latex-viewers '(pdf-tools zathura)
+;;         )
+;;   )
 ;; (add-hook! LaTeX-mode lsp)
 
 (global-set-key (kbd "M-;") 'comment-dwim-2)

@@ -62,11 +62,11 @@
 + If a process does not respond the recovery token, it is dead
 * Comparison between algorithms
 + Centralize is the most efficient
-|---------------+----------------------------------------------------------------------+-----------------------+----------------------------|
-| Algorithm     | Messages per entry/exit                                              | Messages before entry | Problems                   |
-|---------------+----------------------------------------------------------------------+-----------------------+----------------------------|
-| Centralize    | 3                                                                    | 2                     | Single point of failure    |
-| Decentralized | 3mk, k = 1,2,... (Number of retry)                                   | 2m                    | Starvation, low efficiency |
-| Distributed   | 2(n-1+)                                                              | 2(n-1)                | Crash of any process       |
-| Token ring    | 1 to \infty (Token can be circulate forever if no process request)        | 0 to n-1              | Lost token, process crash  |
-|---------------+----------------------------------------------------------------------+-----------------------+----------------------------|
+|---------------+--------------------------------------------------------------------+-----------------------+----------------------------|
+| Algorithm     | Messages per entry/exit                                            | Messages before entry | Problems                   |
+|---------------+--------------------------------------------------------------------+-----------------------+----------------------------|
+| Centralize    | 3                                                                  | 2                     | Single point of failure    |
+| Decentralized | 3mk, k = 1,2,... (Number of retry)                                 | 2m                    | Starvation, low efficiency |
+| Distributed   | 2(n-1+)                                                            | 2(n-1)                | Crash of any process       |
+| Token ring    | 1 to \infty (Token can be circulate forever if no process request) | 0 to n-1              | Lost token, process crash  |
+|---------------+--------------------------------------------------------------------+-----------------------+----------------------------|

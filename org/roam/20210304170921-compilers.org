@@ -26,11 +26,14 @@
   - By inputing regular expressions as specifications, a *Scanner Generator* could build the Scanner
     + e.g. ANTLR
 **** [[file:20210304193614-parser_compiler.org][Parser]]
-- Using *rules* to recognizes syntax from *tokens* (*Context-free analysis*)
+- Using *rules* to recognizes syntax from *tokens* ( *Context-free analysis*)
 - Performs *context-sensitive* (semantic) analysis
   + Analysis that include relation between multiple sentences
   + E.g. type checking
 - Build [[file:20210305142947-intermediate_representations.org][Intermediate Representations]]
+- Some types of analysis
+  + [[file:20210305151346-control_flow_graph_cfg.org][Control Flow Graph (CFG)]]  (Control Flow Analysys)
+  + [[file:20210311211156-data_flow_analysis.org][Data Flow Analysis]]
 ** Back End
 + Automation is less useful in backend. Most of the tasks are done through heuristics
 + Problems in the back end are /NP-hard/
