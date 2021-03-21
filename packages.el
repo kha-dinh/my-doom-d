@@ -7,6 +7,8 @@
 ;; (package!  ivy-bibtex)
 (package! org-roam-bibtex)
 (package! org-ref)
+(package! org-pomodoro)
+;; (package! org-download)
 
 (package! lsp-latex)
 (unpin! pdf-tools)

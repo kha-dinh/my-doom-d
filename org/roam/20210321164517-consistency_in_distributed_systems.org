@@ -1,0 +1,99 @@
+#+title: Consistency in Distributed Systems
+
+* Consistency Problem
++ Every time data changed on replica, it has to change on all other replicas
+* Consistency Models
+** Data centric
++ Every client have consistent view on data
++ Have a high overhead
+*** Strict Consitency
++ Every read must be correspond to the *most recent* write
++ Not possible in large scale system
+*** Continuous Consistency
++ Consistency requirements differ based on application
++ 3 inconsistency types
+  + Numberical value
+  + Relative staleness
+  + Number and order of update operations
+*** Sequential Consistency
++ The result of any operation is the same in sequential order for any process
++
+*** Causal Consistency
++ 2 events are =causally related= if one caused by or influenced by the another
++ The order does not matter if the operations are not causually related
+*** Entry Consistency
++ Every read and write have to acquire a lock to enter critical sectiond
+***  FIFO Consistency
++ Write from a single process seen in order by all other processes
++ Write fron different processes, the order is not cared
+*** Weak Consistensy
++ Use a =Synchronize(S)= operation to synchronize =synchronization variables=
+  - Wait for all operation before to complete in sequential order
+  - No peration on synchronization variable allowed until all previous writes is complete
+  - No read / write operations on data until all previous operations finishes
+*** Release Consistency
++ Use two operations =Acquire= and =Release= to enter critical section
++ There may be two way to achieve consistency
+  + Eager Release Consistency: every release push the updates
+  + Lazy Release Consistency: every acquire pull the updates
+** Client centric
++ The consistency maintained for each client separatedly
+*** Notations
++ X_{i}[t]: local copy of x at time t in replica L_{i}
++ WS(x_{i}[t]): Write-set for x_{i} at time t
+  - A series of writes at L_{i} at time t
++ WS(x_{i};x_{j}): A series of writes on multiple replicas
+*** Eventual Consistency
++ Assumes that most of the operations are reads and all writes done by central autohorities
++ If there are no update for a while, all clients will *eventually* have consitent data
++ Mobile use accessing different replicas may notice inconsistency
+**** Implementation
+***** Push model
++ Periodically send updates to replicas
+***** Pull model
++ Periodically try to get newest data from all replicas
+***** Lease
++ The server promish it will *push* update at a =lease=
++ After the lease expires, the client *pull* the updates.
+*** Monotonic Reads Consistency
++ Guarantee that if a process has seen value x at time t, it will never see an older version later.
++ /Example/ : User reads emails x1 in New York, then fly to San Fransisco. Monotonic Reads Consistency guarantee that x1 will be in the mailbox.
+*** Monotonic Writes Consistency
++ Guarantee that a write operation on x can only performed if x is up-to-date
+*** Read Your Writes
++ The effect of a write by a process is always seen by following reads of the same process
+*** Write-follow-Reads
++ Guarantee that write operations on data x after a read on x will be on same or more recent x
+* Consistency Protocols
++ Implemention of a consistency model
+** Primary-based Replication Protocols
++ A =Primary= server stores the most recent backup for item x handle requests from other replicas
+*** Remote-Write
++ Every read and writes forward to a primary server
++ Low efficiency on many read.
+*** Primary-backup
++ Read operation are on local copies, but *updates* must propagated to backup server and other copies.
++ Update operation takes a long time
++ Good for read-intensive
+*** Local-Write
++ On write on item x, x moves from primary server to the local server.
++ Local server becomes the new primary server for item x
++ Read done on local copy, but updates must probagated
++ Charateristics:
+  - The writer must locate where each data currently is
+  - Locality improved
+  - Good for mobile computers
+** Replicated-write protocols
++ Updates must sent to all replicas
++ No primary replica
++ Problem: Maintaining order of updates ->
+*** Quorum-based
++ A quorum is the minimum number of members of a deliberative assembly (a body that uses parliamentary procedure, such as a legislature) necessary to conduct the business of that group.
++ Assign a number of =votes= for each replica
++ Define:
+  - N: total number of votes
+  - R: Read quorum, W: Write quorum
+  - R + W > N
+  - W > N/2
++ Only one writer can achieve write quorum at a time
++ Every reader se at least one copy of the most recent read

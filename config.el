@@ -69,7 +69,7 @@
    ("<return>" nil)
    ("RET" nil)
    )
-  (add-hook 'evil-normal-state-entry-hook #'company-abort)
+  ;; (add-hook 'evil-normal-state-entry-hook #'company-abort)
   )
 
 
@@ -97,7 +97,7 @@
 (add-hook! org-mode +org-pretty-mode)
 (use-package! org-roam-server
   :config
-  (setq org-roam-server-host "127.0.0.1"
+  (setq org-roam-server-host "localhost"
         org-roam-server-port 8080
         org-roam-server-authenticate nil))
 
@@ -135,3 +135,22 @@
       :desc "Vertical split" "0"  'ace-delete-other-windows
       :desc "Kill buffer" "k" 'kill-this-buffer
       )
+(global-set-key (kbd "C-s") 'save-buffer)
+
+(add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
+(add-to-list 'auto-mode-alist '("\\.terminal\\'" . auto-revert-tail-mode))
+
+(defun etc-log-tail-handler ()
+  (end-of-buffer)
+  (make-variable-buffer-local 'auto-revert-interval)
+  (setq auto-revert-interval 1)
+  (auto-revert-set-timer)
+  (make-variable-buffer-local 'auto-revert-verbose)
+  (setq auto-revert-verbose nil)
+  (read-only-mode t)
+  (font-lock-mode 0)
+  (when (fboundp 'show-smartparens-mode)
+    (show-smartparens-mode 0)))
+
+(add-hook 'auto-revert-tail-mode-hook 'etc-log-tail-handler)
+;; (set-face-background 'default "undefined")

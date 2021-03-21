@@ -3,7 +3,7 @@
 * Basics
 + Is a collection of computers that behave like a single system
 + Need to have *Autonomous* components that collaborate with each other
-+ A *Middleware* layer is used to connect different machines, it offers local OSes and Applications the same interfaces.
++ A *Middleware* layer used to connect different machines, it offers local OSes and Applications the same interfaces.
 * Some characteristics of Distributed systems:
 ** There is no global state
     - Processes have no up-to-date knowledge of other processes state.
@@ -41,3 +41,6 @@
 3. Replication
    a. Caching
 * [[file:20210303212911-distributed_recovery.org][Distributed Recovery]]
+* [[file:20210321164517-consistency_in_distributed_systems.org][Consistency in Distributed Systems]]
++ Sometimes data store have to replicated to different nodes. Consistency have to maintained between replicas.
+* [[file:20210321184516-fault_tolerancce_in_distributed_systems.org][Fault Tolerancce in Distributed Systems]]
